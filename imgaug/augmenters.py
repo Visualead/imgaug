@@ -1147,6 +1147,7 @@ class Rescale(Augmenter):
         by `np.random`.
     """
     def __init__(self, scale=1, name=None, deterministic=False, random_state=None):
+        # todo: check inputs
         super(Rescale, self).__init__(name=name, deterministic=deterministic, random_state=random_state)
         self.scale = scale
 
@@ -1159,6 +1160,7 @@ class Rescale(Augmenter):
         return images
 
     def _augment_keypoints(self, keypoints_on_images, random_state, parents, hooks):
+        # todo
         pass
 
     def get_parameters(self):
@@ -1190,6 +1192,7 @@ class Resize(Augmenter):
         by `np.random`.
     """
     def __init__(self, smaller_dim_size=480, name=None, deterministic=False, random_state=None):
+        # todo: check inputs
         super(Resize, self).__init__(name=name, deterministic=deterministic, random_state=random_state)
         self.smaller_dim_size = smaller_dim_size
 
@@ -1205,6 +1208,7 @@ class Resize(Augmenter):
         return images
 
     def _augment_keypoints(self, keypoints_on_images, random_state, parents, hooks):
+        # todo
         pass
 
     def get_parameters(self):
@@ -1236,6 +1240,7 @@ class Rotate(Augmenter):
         by `np.random`.
     """
     def __init__(self, angle=0, name=None, deterministic=False, random_state=None):
+        # todo: check inputs
         super(Rotate, self).__init__(name=name, deterministic=deterministic, random_state=random_state)
         self.angle = angle
 
@@ -1248,6 +1253,7 @@ class Rotate(Augmenter):
         return images
 
     def _augment_keypoints(self, keypoints_on_images, random_state, parents, hooks):
+        # todo
         pass
 
     def get_parameters(self):
