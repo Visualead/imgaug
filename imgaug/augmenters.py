@@ -1123,6 +1123,136 @@ class Crop(Augmenter):
     def get_parameters(self):
         return [self.top, self.right, self.bottom, self.left]
 
+class Rescale(Augmenter):
+    """Rescale the input images by a given factor
+
+    Parameters
+    ----------
+    scale : int or float
+        the scale by which to rescale the image
+
+    name : string, optional(default=None)
+        name of the instance
+
+    deterministic : boolean, optional (default=False)
+        Whether random state will be saved before augmenting images
+        and then will be reset to the saved value post augmentation
+        use this parameter to obtain transformations in the EXACT order
+        everytime
+
+    random_state : int, RandomState instance or None, optional (default=None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
+    """
+    def __init__(self, scale=1, name=None, deterministic=False, random_state=None):
+        super(Rescale, self).__init__(name=name, deterministic=deterministic, random_state=random_state)
+        self.scale = scale
+
+    def _augment_images(self, images, random_state, parents, hooks):
+        nb_images = len(images)
+        for i in range(nb_images):
+            images[i] = tf.rescale(images[i], self.scale)
+            images[i] = (images[i] * 255).astype(np.uint8, copy=False)
+
+        return images
+
+    def _augment_keypoints(self, keypoints_on_images, random_state, parents, hooks):
+        pass
+
+    def get_parameters(self):
+        return [self.scale]
+
+
+class Resize(Augmenter):
+    """Resize the input images to a given size while keeping aspect ratio
+
+    Parameters
+    ----------
+    smaller_dim_size : int
+        the size to which the smaller image dimension will be resized.
+        The other dimension will be resized accordingly to keep aspect ratio.
+
+    name : string, optional(default=None)
+        name of the instance
+
+    deterministic : boolean, optional (default=False)
+        Whether random state will be saved before augmenting images
+        and then will be reset to the saved value post augmentation
+        use this parameter to obtain transformations in the EXACT order
+        everytime
+
+    random_state : int, RandomState instance or None, optional (default=None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
+    """
+    def __init__(self, smaller_dim_size=480, name=None, deterministic=False, random_state=None):
+        super(Resize, self).__init__(name=name, deterministic=deterministic, random_state=random_state)
+        self.smaller_dim_size = smaller_dim_size
+
+    def _augment_images(self, images, random_state, parents, hooks):
+        nb_images = len(images)
+        for i in range(nb_images):
+            factor = self.smaller_dim_size / min(images[i].shape[:2])
+            new_size =  (round(images[i].shape[0]*factor),
+                         round(images[i].shape[1]*factor))
+            images[i] = tf.resize(images[i], new_size)
+            images[i] = (images[i] * 255).astype(np.uint8, copy=False)
+
+        return images
+
+    def _augment_keypoints(self, keypoints_on_images, random_state, parents, hooks):
+        pass
+
+    def get_parameters(self):
+        return [self.smaller_dim_size]
+
+
+class Rotate(Augmenter):
+    """Rotate the input images by a given amount of degrees without cropping
+
+    Parameters
+    ----------
+    smaller_dim_size : int
+        the size to which the smaller image dimension will be resized.
+        The other dimension will be resized accordingly to keep aspect ratio.
+
+    name : string, optional(default=None)
+        name of the instance
+
+    deterministic : boolean, optional (default=False)
+        Whether random state will be saved before augmenting images
+        and then will be reset to the saved value post augmentation
+        use this parameter to obtain transformations in the EXACT order
+        everytime
+
+    random_state : int, RandomState instance or None, optional (default=None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
+    """
+    def __init__(self, angle=0, name=None, deterministic=False, random_state=None):
+        super(Rotate, self).__init__(name=name, deterministic=deterministic, random_state=random_state)
+        self.angle = angle
+
+    def _augment_images(self, images, random_state, parents, hooks):
+        nb_images = len(images)
+        for i in range(nb_images):
+            images[i] = tf.rotate(images[i], angle=self.angle, resize=True)
+            images[i] = (images[i] * 255).astype(np.uint8, copy=False)
+
+        return images
+
+    def _augment_keypoints(self, keypoints_on_images, random_state, parents, hooks):
+        pass
+
+    def get_parameters(self):
+        return [self.angle]
+
 
 class Fliplr(Augmenter):
     """Flip the input images horizontally
