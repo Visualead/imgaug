@@ -14,24 +14,14 @@ def prepare_sequential_augmentations():
     :return: list of different sequential augmentation instances
     """
     flips = [iaa.Fliplr(0, name='flip_0'), iaa.Fliplr(1, name='flip_1')]
-    scales = [iaa.Affine(scale={"x": (0.5), "y": (0.5)}, name='scale_0.5'),
-              iaa.Noop(name='scale_1'),
-              iaa.Affine(scale={"x": (1.5), "y": (1.5)}, name='scale_1.5')]
-    scales = [iaa.Rescale(scale=0.5, name='scale_0.5'),
-              iaa.Noop(name='scale_1'),
-              iaa.Rescale(scale=1.5, name='scale_1.5')]
+
     scales = [iaa.Resize(smaller_dim_size=240, name='scale_240'),
               iaa.Resize(smaller_dim_size=480, name='scale_480'),
               iaa.Resize(smaller_dim_size=720, name='scale_720')]
 
-
-    rotations = [iaa.Affine(rotate=(-10), name='rot_350'),
-                 iaa.Noop(name='rotate_0'),
-                 iaa.Affine(rotate=(+10), name='rot_10')]
     rotations = [iaa.Rotate(angle=(-10), name='rot_350'),
                  iaa.Noop(name='rotate_0'),
                  iaa.Rotate(angle=(+10), name='rot_10')]
-
 
     sequential_augs = []
     for flip in flips:
