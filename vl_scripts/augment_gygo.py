@@ -19,9 +19,9 @@ def prepare_sequential_augmentations():
               iaa.Resize(smaller_dim_size=480, name='scale_480'),
               iaa.Resize(smaller_dim_size=720, name='scale_720')]
 
-    rotations = [iaa.Rotate(angle=(-10), name='rot_350'),
+    rotations = [iaa.Rotate(angle=(-10), name='rotate_350'),
                  iaa.Noop(name='rotate_0'),
-                 iaa.Rotate(angle=(+10), name='rot_10')]
+                 iaa.Rotate(angle=(+10), name='rotate_10')]
 
     sequential_augs = []
     for flip in flips:
